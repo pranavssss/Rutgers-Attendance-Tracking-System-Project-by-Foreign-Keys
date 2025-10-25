@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>RU Attendance • Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ru-red:#cc0033; --ru-red-600:#b3002c; --ring:rgba(204,0,51,.28);
+      --text:#e5e7eb; --ink:#0b0c0e;
+      --bg-img: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2000&auto=format&fit=crop');
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans"; background:#0b0c0e; color:#111827; overflow-x:hidden}
+    .topbar{position:fixed; inset:0 0 auto 0; height:64px; z-index:20; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 18px; color:#fff; background:linear-gradient(180deg, rgba(0,0,0,.6), rgba(0,0,0,0)); backdrop-filter:saturate(120%) blur(2px)}
+    .brand{display:flex; align-items:center; gap:12px; color:#fff; text-decoration:none}
+    .brand-logo{width:36px; height:36px; display:grid; place-items:center; border-radius:10px; background:var(--ru-red); color:#fff; font-weight:800; letter-spacing:.3px; box-shadow:0 8px 24px rgba(204,0,51,.45)}
+    .brand span{font-weight:700}
+    .btn{appearance:none; border:1px solid transparent; border-radius:12px; padding:10px 14px; font-weight:700; font-size:14px; display:inline-flex; align-items:center; gap:8px; text-decoration:none; transition:.2s; cursor:pointer}
+    .btn.outline{color:#fff; border-color:rgba(255,255,255,.25); background:rgba(0,0,0,.25)}
+    .btn.outline:hover{border-color:#fff}
+    .btn.white{background:#fff; color:#111827}
+    .btn.ru{background:var(--ru-red); color:#fff}
+    .btn.ru:hover{background:var(--ru-red-600); transform:translateY(-1px)}
+    .top-actions{display:flex; gap:10px}
+
+    .cover{position:relative; min-height:100vh; display:grid; grid-template-columns:minmax(0,1fr); align-items:center; padding:64px 18px 24px; isolation:isolate}
+    .cover::before{content:""; position:absolute; inset:0; z-index:-2; background-image:var(--bg-img); background-size:cover; background-position:center; background-repeat:no-repeat; transform:scale(1.02)}
+    .cover::after{content:""; position:absolute; inset:0; z-index:-1; background:radial-gradient(1000px 600px at 10% -10%, rgba(204,0,51,.18), transparent 55%), linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.65) 55%, rgba(0,0,0,.85))}
+    .stack{width:min(1200px,94vw); margin:0 auto; display:grid; gap:28px; grid-template-columns:1.2fr .9fr; align-items:center}
+    @media (max-width:960px){.stack{grid-template-columns:1fr}}
+
+    .glass{color:#fff; border-radius:22px; overflow:hidden; background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.12); box-shadow:0 25px 80px rgba(0,0,0,.45); padding:28px}
+    .eyebrow{font-size:12px; letter-spacing:.18em; color:#fca5a5; text-transform:uppercase; font-weight:800}
+    h1{margin:.35rem 0 1rem; font-size:40px; line-height:1.1}
+    .lede{color:var(--text); font-size:18px}
+    .chip{display:inline-flex; align-items:center; gap:8px; background:rgba(255,255,255,.1); border:1px solid rgba(255,255,255,.2); padding:10px 12px; border-radius:999px; color:#fff; font-size:13px; margin-top:14px}
+
+    .card{background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.22); color:#fff; border-radius:18px; padding:24px; backdrop-filter: blur(8px) saturate(120%); box-shadow:0 18px 70px rgba(0,0,0,.45)}
+    .card h2{margin:.25rem 0 1rem; font-size:22px}
+    .muted{color:#e5e7ebcc; font-size:14px}
+    form{margin-top:14px}
+    .field{margin-bottom:14px}
+    label{display:block; font-weight:700; margin:0 0 6px 2px; font-size:13px; color:#f9fafb}
+    .control{width:100%; padding:12px 14px; border-radius:12px; border:1px solid rgba(255,255,255,.28); background:rgba(0,0,0,.35); color:#fff; outline:none; font-size:15px; transition:border-color .15s, box-shadow .15s}
+    .control::placeholder{color:#cbd5e199}
+    .control:focus{border-color:var(--ru-red); box-shadow:0 0 0 4px var(--ring)}
+    .row{display:flex; gap:12px}
+    .row>*{flex:1}
+    .helper{display:flex; align-items:center; justify-content:space-between; gap:12px; margin:4px 2px 10px}
+    .checkbox{display:inline-flex; align-items:center; gap:8px; cursor:pointer; user-select:none}
+    .checkbox input{accent-color:var(--ru-red)}
+    .link{color:#fff; text-underline-offset:3px}
+    .link:hover{text-decoration:underline}
+    .submit{width:100%; justify-content:center}
+    .credits{margin-top:16px; font-size:12px; color:#d1d5dbcc; text-align:center}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#">
+      <div class="brand-logo">R</div><span>Rutgers Attendance</span>
+    </a>
+    <nav class="top-actions">
+      <a class="btn outline" href="#">Status &amp; Alerts</a>
+      <a class="btn white" href="#">Help</a>
+      <a class="btn ru" href="#">NetID Login</a>
+    </nav>
+  </header>
+
+  <main class="cover">
+    <div class="stack">
+      <section class="glass">
+        <div class="eyebrow">NEW • Fall Pilot</div>
+        <h1>Canvas-style login, tuned for taking attendance fast.</h1>
+        <p class="lede">Sign in with your Rutgers NetID or email to manage classes, open live sessions, and record presence in seconds. Admins can add users and sections; instructors can launch sessions; students can view their history.</p>
+        <div class="chip">✔ Demo mode enabled</div>
+      </section>
+
+      <section class="card" aria-label="Login form">
+        <h2>Sign in</h2>
+        <div class="muted">Use your NetID or email to continue.</div>
+
+        <form id="loginForm" novalidate>
+          <div class="field">
+            <label for="email">Email / NetID</label>
+            <input id="email" name="email" type="text" class="control" placeholder="netid@rutgers.edu" required />
+          </div>
+          <div class="field">
+            <label for="password">Password</label>
+            <div style="position:relative">
+              <input id="password" name="password" type="password" class="control" placeholder="••••••••" required />
+              <button type="button" id="togglePw" aria-label="Show password" style="position:absolute; right:10px; top:50%; transform:translateY(-50%); border:none; background:transparent; cursor:pointer; padding:6px; color:#e5e7eb;">👁️</button>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="field">
+              <label for="role">Role</label>
+              <!-- Keep both labels; value='teacher' so we route to teacher.html -->
+              <select id="role" name="role" class="control" required>
+                <option value="" disabled selected>Select role</option>
+                <option value="student">Student</option>
+                <option value="teacher">Instructor (Teacher)</option>
+                <option value="admin">Admin</option>
+              </select>
+            </div>
+            <div class="field">
+              <label for="term">Term</label>
+              <select id="term" name="term" class="control">
+                <option>Fall 2025</option>
+                <option>Spring 2026</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="helper">
+            <label class="checkbox">
+              <input type="checkbox" id="remember" /> <span>Remember me</span>
+            </label>
+            <a class="link" href="#">Forgot password?</a>
+          </div>
+
+          <button type="submit" class="btn ru submit">Continue</button>
+          <div class="credits">© Rutgers Attendance • Demo Front End</div>
+        </form>
+      </section>
+    </div>
+  </main>
+
+  <script>
+    // Show/Hide password
+    const toggle = document.getElementById('togglePw');
+    const pw = document.getElementById('password');
+    toggle.addEventListener('click', () => {
+      const s = pw.type === 'password' ? 'text' : 'password';
+      pw.type = s;
+      toggle.textContent = s === 'password' ? '👁️' : '🙈';
+    });
+
+    // Helper: seed mock data for the next pages
+    function seedMockData(email) {
+      // Student mock
+      const student = {
+        email,
+        name: "Jane Doe",
+        subjects: [
+          { code: "CS101", title: "Intro to CS", attendance: 92, totalSessions: 24, attended: 22 },
+          { code: "MATH201", title: "Discrete Math", attendance: 88, totalSessions: 25, attended: 22 },
+          { code: "BIO110", title: "Biology Lab", attendance: 95, totalSessions: 20, attended: 19 }
+        ]
+      };
+      localStorage.setItem("ru_student", JSON.stringify(student));
+
+      // Teacher mock
+      const teacher = {
+        email,
+        name: "Dr. Smith",
+        classes: [
+          { sectionId: "CS101-01", course: "CS101", title: "Intro to CS", room: "HLL 201", population: 42 },
+          { sectionId: "CS101-02", course: "CS101", title: "Intro to CS", room: "ARC 103", population: 38 }
+        ],
+        // simple roster for the first class
+        roster: [
+          { id:"S001", name:"Ava Patel", status:"Present" },
+          { id:"S002", name:"Liam Chen", status:"Late" },
+          { id:"S003", name:"Noah Kim", status:"Absent" }
+        ],
+        attendanceHistory: [
+          { date:"2025-09-28", sectionId:"CS101-01", present:38, late:2, absent:2 },
+          { date:"2025-09-30", sectionId:"CS101-01", present:37, late:3, absent:2 }
+        ]
+      };
+      localStorage.setItem("ru_teacher", JSON.stringify(teacher));
+    }
+
+    // Submit: route by role (mock auth accepted)
+    document.getElementById('loginForm').addEventListener('submit', (e) => {
+      e.preventDefault();
+      const email = document.getElementById('email').value.trim();
+      const role  = document.getElementById('role').value;
+
+      if (!email || !pw.value || !role){
+        alert('Please fill email, password, and role.');
+        return;
+      }
+
+      // Remember me (email only, demo)
+      if (document.getElementById('remember').checked) {
+        localStorage.setItem('ru_remember_email', email);
+      } else {
+        localStorage.removeItem('ru_remember_email');
+      }
+
+      // Seed demo data so next pages can render immediately
+      seedMockData(email);
+
+      // HREF routing
+      if (role === 'student') {
+        location.href = 'student.html';
+      } else if (role === 'teacher' || role === 'instructor') {
+        location.href = 'teacher.html';
+      } else if (role === 'admin') {
+        location.href = 'admin.html'; // optional stub for later
+      }
+    });
+
+    // Prefill remembered email
+    const remembered = localStorage.getItem('ru_remember_email');
+    if (remembered) document.getElementById('email').value = remembered;
+  </script>
+</body>
+</html>
