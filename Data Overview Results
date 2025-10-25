@@ -1,0 +1,474 @@
+=== TABLES IN DATABASE ===
+- sessions
+- courses
+- sections
+- terms
+- enrollments
+- class_sessions
+- attendance_records
+- users
+- auth_credentials
+
+
+=== TABLE: sessions ===
+Attributes (Columns):
+  - id | INTEGER | nullable: False
+  - user_id | INTEGER | nullable: False
+  - session_token | VARCHAR(64) | nullable: False
+  - created_at | TIMESTAMP | nullable: True
+  - expires_at | TIMESTAMP | nullable: False
+  - ip | VARCHAR(64) | nullable: True
+  - user_agent | VARCHAR(255) | nullable: True
+  - revoked_at | TIMESTAMP | nullable: True
+
+All Rows:
+ id  user_id                    session_token                 created_at                 expires_at        ip                                                                                                            user_agent                 revoked_at
+ 10        1 212cc0eb048241d7a4ab58d40d38a740 2025-10-19 17:34:07.477986 2025-10-26 21:34:07.477455 127.0.0.1                                                                                                            curl/8.7.1 2025-10-19 21:35:47.777335
+ 11        1 fff4f38c36fd48ddb3525600e9d72de4 2025-10-19 17:35:47.780018 2025-10-26 21:35:47.779744 127.0.0.1                                                                                                            curl/8.7.1 2025-10-19 21:48:41.873792
+ 12        1 36ba981bcbf247c29861f91962ac7961 2025-10-19 17:48:41.886546 2025-10-26 21:48:41.886000 127.0.0.1                                                                                                            curl/8.7.1 2025-10-19 22:10:18.301877
+ 13        1 90979d4de5ea4a2ab108d7c34a11718c 2025-10-19 18:10:18.317151 2025-10-26 22:10:18.316528 127.0.0.1                                                                                                            curl/8.7.1 2025-10-19 22:14:08.558084
+ 14        1 117ce66e77ae4b3c830743117442edb9 2025-10-19 18:14:08.573009 2025-10-26 22:14:08.572721 127.0.0.1                                                                                                            curl/8.7.1 2025-10-19 22:16:50.472205
+ 15        1 978ae9d401cb4ba0a6defb70ebd5a856 2025-10-19 18:16:50.486907 2025-10-26 22:16:50.486226 127.0.0.1                                                                                                            curl/8.7.1 2025-10-19 22:19:28.473070
+ 16        1 1d27edc21d494611bced1f99a74d070f 2025-10-19 18:19:28.485032 2025-10-26 22:19:28.484460 127.0.0.1                                                                                                            curl/8.7.1 2025-10-19 22:26:49.508689
+ 17        1 db74d58c75304e85b6f81b361120c15d 2025-10-19 18:26:49.522550 2025-10-26 22:26:49.521938 127.0.0.1                                                                                                            curl/8.7.1 2025-10-19 22:43:04.391077
+ 18        1 61ff31bef0804cf4afe20b8b813cd1ba 2025-10-19 18:43:04.416495 2025-10-26 22:43:04.415679 127.0.0.1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36 2025-10-19 22:46:17.259310
+ 19        1 51476a7e3fe84ad69ac5c21cab57d160 2025-10-19 18:46:17.275477 2025-10-26 22:46:17.275217 127.0.0.1 Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/140.0.0.0 Safari/537.36                        NaT
+
+Shape: 10 rows × 8 columns
+==========================================================================================
+
+=== TABLE: courses ===
+Attributes (Columns):
+  - id | INTEGER | nullable: False
+  - code | VARCHAR(20) | nullable: False
+  - title | VARCHAR(120) | nullable: False
+
+All Rows:
+  id  code                         title
+   1 CS101                   Intro to CS
+   2 CS102               Data Structures
+   5 CS102               Data Structures
+  10 CS201   Machine Learning Principles
+  20 CS301   Natural Language Processing
+ 101 CS401   Natural Language Processing
+ 102 CS402         Large Language Models
+ 103 CS403               Computer Vision
+ 104 CS404        Reinforcement Learning
+ 105 CS405                   Data Mining
+ 403 CS410      Applied Machine Learning
+ 905 CS501 Machine Learning Fundamentals
+ 906 CS502       Advanced Data Analytics
+ 954 CS601          Deep Learning Basics
+ 955 CS602   Data Visualization Advanced
+1004 CS701                     AI Ethics
+1005 CS702        Reinforcement Learning
+
+Shape: 17 rows × 3 columns
+==========================================================================================
+
+=== TABLE: sections ===
+Attributes (Columns):
+  - id | INTEGER | nullable: False
+  - course_id | INTEGER | nullable: True
+  - term_id | INTEGER | nullable: True
+  - instructor_id | INTEGER | nullable: True
+  - meeting_days | VARCHAR(20) | nullable: True
+  - start_time | TIME | nullable: True
+  - end_time | TIME | nullable: True
+  - room | VARCHAR(50) | nullable: True
+
+All Rows:
+  id  course_id  term_id  instructor_id meeting_days start_time end_time     room
+   1          1        1              2          MWF   09:00:00 10:00:00 Room 101
+   2          2        2              4           TR   11:00:00 12:30:00 Room 202
+   5          5        5              6           TR   11:00:00 12:30:00 Room 202
+  10         10       10              9           MW   14:00:00 15:30:00 Room 303
+  20         20       20             31           MW   10:00:00 11:30:00 Room 505
+  21         20       20             32           TR   13:00:00 14:30:00 Room 506
+ 101        101      101            111           MW   09:00:00 10:30:00 Room 101
+ 102        102      101            112           TR   11:00:00 12:30:00 Room 102
+ 103        103      101            113           MW   13:00:00 14:30:00 Room 103
+ 104        104      102            114           TR   09:00:00 10:30:00 Room 104
+ 105        105      102            115           MW   11:00:00 12:30:00 Room 105
+ 301        103      101            311           MW   10:00:00 11:30:00 Room 201
+ 302        104      101            312           TR   12:00:00 13:30:00 Room 202
+ 303        105      102            313           MW   14:00:00 15:30:00 Room 203
+ 405        403      404            401           MW   09:00:00 10:30:00 Room 303
+ 909        905      907            901          MWF   09:00:00 10:30:00 Room 101
+ 910        906      908            902           TR   11:00:00 12:30:00 Room 202
+ 958        954      956            951          MWF   10:00:00 11:30:00 Room 301
+ 959        955      957            952           TR   13:00:00 14:30:00 Room 402
+1008       1004     1006           1001          MWF   09:00:00 10:30:00 Room 501
+1009       1005     1007           1002           TR   14:00:00 15:30:00 Room 602
+
+Shape: 21 rows × 8 columns
+==========================================================================================
+
+=== TABLE: terms ===
+Attributes (Columns):
+  - id | INTEGER | nullable: False
+  - name | VARCHAR(50) | nullable: False
+  - start_date | DATE | nullable: True
+  - end_date | DATE | nullable: True
+
+All Rows:
+  id        name start_date   end_date
+   1   Fall 2025 2025-09-01 2025-12-20
+   2 Spring 2026 2026-01-15 2026-05-10
+   5 Spring 2026 2026-01-15 2026-05-10
+  10   Fall 2026 2026-08-25 2026-12-15
+  20   Fall 2026 2026-08-25 2026-12-15
+ 101   Fall 2026 2026-08-25 2026-12-15
+ 102 Spring 2027 2027-01-15 2027-05-10
+ 404   Fall 2028 2028-08-20 2028-12-10
+ 907 Spring 2030 2030-01-10 2030-05-05
+ 908 Summer 2030 2030-06-01 2030-08-15
+ 956   Fall 2030 2030-08-20 2030-12-15
+ 957 Spring 2031 2031-01-15 2031-05-10
+1006   Fall 2031 2031-08-25 2031-12-12
+1007 Spring 2032 2032-01-10 2032-05-05
+
+Shape: 14 rows × 4 columns
+==========================================================================================
+
+=== TABLE: enrollments ===
+Attributes (Columns):
+  - id | INTEGER | nullable: False
+  - section_id | INTEGER | nullable: True
+  - student_id | INTEGER | nullable: True
+
+All Rows:
+  id  section_id  student_id
+   1           1           1
+   2           2           3
+   5           5           5
+  10          10           5
+  21          20          21
+  22          20          22
+  23          20          23
+  24          20          24
+  25          20          25
+  26          20          26
+  27          21          27
+  28          21          28
+  29          21          29
+  30          21          30
+  31          21          21
+  32          21          23
+ 101         101         101
+ 102         101         102
+ 103         101         103
+ 104         102         104
+ 105         102         105
+ 106         102         101
+ 107         103         106
+ 108         103         107
+ 109         103         102
+ 110         104         108
+ 111         104         109
+ 112         104         110
+ 113         105         101
+ 114         105         104
+ 115         105         105
+ 301         301         301
+ 302         301         302
+ 303         301         303
+ 304         301         304
+ 305         302         305
+ 306         302         306
+ 307         302         307
+ 308         302         302
+ 309         303         308
+ 310         303         309
+ 311         303         310
+ 312         303         301
+ 406         405         402
+ 911         909         903
+ 912         909         904
+ 913         910         903
+ 914         910         904
+ 960         958         953
+ 961         959         953
+1010        1008        1003
+1011        1009        1003
+
+Shape: 52 rows × 3 columns
+==========================================================================================
+
+=== TABLE: class_sessions ===
+Attributes (Columns):
+  - id | INTEGER | nullable: False
+  - section_id | INTEGER | nullable: True
+  - session_date | DATE | nullable: False
+  - status | VARCHAR(20) | nullable: False
+
+All Rows:
+  id  section_id session_date    status
+   1           1   2025-10-20 scheduled
+   2           2   2026-02-05 scheduled
+   3           2   2026-02-12 scheduled
+   5           5   2026-02-05 scheduled
+   6           5   2026-02-12 scheduled
+  10          10   2026-09-02 scheduled
+  11          10   2026-09-09 scheduled
+  20          20   2026-09-03 scheduled
+  21          20   2026-09-10 scheduled
+  22          20   2026-09-17 scheduled
+  23          20   2026-09-24 scheduled
+  24          21   2026-09-04 scheduled
+  25          21   2026-09-11 scheduled
+  26          21   2026-09-18 scheduled
+  27          21   2026-09-25 scheduled
+ 101         101   2026-09-01 scheduled
+ 102         101   2026-09-08 scheduled
+ 103         102   2026-09-02 scheduled
+ 104         102   2026-09-09 scheduled
+ 105         103   2026-09-03 scheduled
+ 106         103   2026-09-10 scheduled
+ 107         104   2027-01-20 scheduled
+ 108         104   2027-01-27 scheduled
+ 109         105   2027-01-21 scheduled
+ 110         105   2027-01-28 scheduled
+ 301         301   2026-09-05 scheduled
+ 302         301   2026-09-12 scheduled
+ 303         302   2026-09-06 scheduled
+ 304         302   2026-09-13 scheduled
+ 305         303   2027-01-21 scheduled
+ 306         303   2027-01-28 scheduled
+ 407         405   2028-09-05 scheduled
+ 408         405   2028-09-12 scheduled
+ 915         909   2030-01-15 scheduled
+ 916         909   2030-01-22 scheduled
+ 917         910   2030-06-03 scheduled
+ 918         910   2030-06-10 scheduled
+ 962         958   2030-08-25 scheduled
+ 963         958   2030-09-01 scheduled
+ 964         959   2031-01-20 scheduled
+ 965         959   2031-01-27 scheduled
+1012        1008   2031-08-30 scheduled
+1013        1008   2031-09-06 scheduled
+1014        1009   2032-01-15 scheduled
+1015        1009   2032-01-22 scheduled
+
+Shape: 45 rows × 4 columns
+==========================================================================================
+
+=== TABLE: attendance_records ===
+Attributes (Columns):
+  - id | INTEGER | nullable: False
+  - session_id | INTEGER | nullable: True
+  - student_id | INTEGER | nullable: True
+  - status | VARCHAR(20) | nullable: False
+  - marked_at | TIMESTAMP | nullable: True
+  - notes | TEXT | nullable: True
+
+All Rows:
+  id  session_id  student_id  status                  marked_at notes
+   1           1           1 present 2025-10-19 15:46:48.259805  None
+   2           2           3 present 2025-10-20 02:09:18.296667  None
+   3           3           3  absent 2025-10-20 02:09:18.296667  None
+   5           5           5 present 2025-10-20 14:41:42.548085  None
+   6           6           5  absent 2025-10-20 14:41:42.548085  None
+  10          10           5 present 2025-10-20 15:16:07.825795  None
+  11          11           5  absent 2025-10-20 15:16:07.825795  None
+  20          20          21 present 2025-10-20 18:14:54.731658  None
+  21          21          21  absent 2025-10-20 18:14:54.731658  None
+  22          22          21 present 2025-10-20 18:14:54.731658  None
+  23          23          21 present 2025-10-20 18:14:54.731658  None
+  24          20          22 present 2025-10-20 18:14:54.731658  None
+  25          21          22 present 2025-10-20 18:14:54.731658  None
+  26          22          22  absent 2025-10-20 18:14:54.731658  None
+  27          23          22 present 2025-10-20 18:14:54.731658  None
+  28          20          23  absent 2025-10-20 18:14:54.731658  None
+  29          21          23 present 2025-10-20 18:14:54.731658  None
+  30          22          23 present 2025-10-20 18:14:54.731658  None
+  31          23          23  absent 2025-10-20 18:14:54.731658  None
+  32          20          24 present 2025-10-20 18:14:54.731658  None
+  33          21          24 present 2025-10-20 18:14:54.731658  None
+  34          22          24 present 2025-10-20 18:14:54.731658  None
+  35          23          24  absent 2025-10-20 18:14:54.731658  None
+  36          20          25  absent 2025-10-20 18:14:54.731658  None
+  37          21          25 present 2025-10-20 18:14:54.731658  None
+  38          22          25 present 2025-10-20 18:14:54.731658  None
+  39          23          25 present 2025-10-20 18:14:54.731658  None
+  40          20          26 present 2025-10-20 18:14:54.731658  None
+  41          21          26 present 2025-10-20 18:14:54.731658  None
+  42          22          26  absent 2025-10-20 18:14:54.731658  None
+  43          23          26 present 2025-10-20 18:14:54.731658  None
+  44          24          27 present 2025-10-20 18:14:54.731658  None
+  45          25          27  absent 2025-10-20 18:14:54.731658  None
+  46          26          27 present 2025-10-20 18:14:54.731658  None
+  47          27          27 present 2025-10-20 18:14:54.731658  None
+  48          24          28  absent 2025-10-20 18:14:54.731658  None
+  49          25          28 present 2025-10-20 18:14:54.731658  None
+  50          26          28 present 2025-10-20 18:14:54.731658  None
+  51          27          28  absent 2025-10-20 18:14:54.731658  None
+  52          24          29 present 2025-10-20 18:14:54.731658  None
+  53          25          29 present 2025-10-20 18:14:54.731658  None
+  54          26          29 present 2025-10-20 18:14:54.731658  None
+  55          27          29 present 2025-10-20 18:14:54.731658  None
+  56          24          30  absent 2025-10-20 18:14:54.731658  None
+  57          25          30 present 2025-10-20 18:14:54.731658  None
+  58          26          30  absent 2025-10-20 18:14:54.731658  None
+  59          27          30 present 2025-10-20 18:14:54.731658  None
+  60          24          21 present 2025-10-20 18:14:54.731658  None
+  61          25          21  absent 2025-10-20 18:14:54.731658  None
+  62          26          21 present 2025-10-20 18:14:54.731658  None
+  63          27          21 present 2025-10-20 18:14:54.731658  None
+  64          24          23 present 2025-10-20 18:14:54.731658  None
+  65          25          23  absent 2025-10-20 18:14:54.731658  None
+  66          26          23 present 2025-10-20 18:14:54.731658  None
+  67          27          23 present 2025-10-20 18:14:54.731658  None
+ 101         101         101 present 2025-10-20 18:29:05.324692  None
+ 102         101         102  absent 2025-10-20 18:29:05.324692  None
+ 103         101         103 present 2025-10-20 18:29:05.324692  None
+ 104         102         101 present 2025-10-20 18:29:05.324692  None
+ 105         102         102 present 2025-10-20 18:29:05.324692  None
+ 106         102         103  absent 2025-10-20 18:29:05.324692  None
+ 107         103         104 present 2025-10-20 18:29:05.324692  None
+ 108         103         105 present 2025-10-20 18:29:05.324692  None
+ 109         103         101  absent 2025-10-20 18:29:05.324692  None
+ 110         104         104 present 2025-10-20 18:29:05.324692  None
+ 111         104         105  absent 2025-10-20 18:29:05.324692  None
+ 112         104         101 present 2025-10-20 18:29:05.324692  None
+ 113         105         101 present 2025-10-20 18:29:05.324692  None
+ 114         105         104 present 2025-10-20 18:29:05.324692  None
+ 115         105         105 present 2025-10-20 18:29:05.324692  None
+ 301         301         301 present 2025-10-20 18:48:59.393514  None
+ 302         301         302  absent 2025-10-20 18:48:59.393514  None
+ 303         301         303 present 2025-10-20 18:48:59.393514  None
+ 304         301         304 present 2025-10-20 18:48:59.393514  None
+ 305         302         301 present 2025-10-20 18:48:59.393514  None
+ 306         302         302 present 2025-10-20 18:48:59.393514  None
+ 307         302         303  absent 2025-10-20 18:48:59.393514  None
+ 308         302         304 present 2025-10-20 18:48:59.393514  None
+ 309         303         308 present 2025-10-20 18:48:59.393514  None
+ 310         303         309 present 2025-10-20 18:48:59.393514  None
+ 311         303         310  absent 2025-10-20 18:48:59.393514  None
+ 312         303         301 present 2025-10-20 18:48:59.393514  None
+ 409         407         402 present 2025-10-20 23:28:21.551627  None
+ 410         408         402  absent 2025-10-20 23:28:21.551627  None
+ 919         915         903 present 2025-10-24 18:31:59.839255  None
+ 920         916         903  absent 2025-10-24 18:31:59.839255  None
+ 921         915         904 present 2025-10-24 18:31:59.839255  None
+ 922         916         904 present 2025-10-24 18:31:59.839255  None
+ 923         917         903 present 2025-10-24 18:31:59.839255  None
+ 924         918         903 present 2025-10-24 18:31:59.839255  None
+ 925         917         904  absent 2025-10-24 18:31:59.839255  None
+ 926         918         904 present 2025-10-24 18:31:59.839255  None
+ 966         962         953 present 2025-10-24 18:40:13.320190  None
+ 967         963         953  absent 2025-10-24 18:40:13.320190  None
+ 968         964         953 present 2025-10-24 18:40:13.320190  None
+ 969         965         953 present 2025-10-24 18:40:13.320190  None
+1016        1012        1003 present 2025-10-24 18:48:14.079792  None
+1017        1013        1003  absent 2025-10-24 18:48:14.079792  None
+1018        1014        1003 present 2025-10-24 18:48:14.079792  None
+1019        1015        1003 present 2025-10-24 18:48:14.079792  None
+
+Shape: 100 rows × 6 columns
+==========================================================================================
+
+=== TABLE: users ===
+Attributes (Columns):
+  - id | INTEGER | nullable: False
+  - name | VARCHAR(100) | nullable: True
+  - username | VARCHAR(100) | nullable: True
+  - role | VARCHAR(20) | nullable: True
+
+All Rows:
+  id                 name username    role
+ 101          Mia Student  mia1234 student
+ 102       Oliver Student  oli2345 student
+ 103       Harper Student  har3456 student
+ 104       Elijah Student  eli4567 student
+ 105        Avery Student  ave5678 student
+ 106        James Student  jam6789 student
+ 107       Amelia Student  ame7890 student
+ 108     Benjamin Student  ben8901 student
+ 109       Evelyn Student  eve9012 student
+ 110        Lucas Student  luc0123 student
+ 111 Charlotte Instructor  cha1122 teacher
+ 112     Henry Instructor  hen2233 teacher
+ 113    Sophia Instructor  sop3344 teacher
+ 114   William Instructor  wil4455 teacher
+ 115  Isabella Instructor  isa5566 teacher
+ 301        Grace Student  gra1122 student
+ 302        Henry Student  hen3344 student
+ 303          Ivy Student  ivy4455 student
+ 304         Jack Student  jac5566 student
+ 305         Lily Student  lil6677 student
+ 306        Mason Student  mas7788 student
+ 307         Nora Student  nor8899 student
+ 308         Owen Student  owe9900 student
+ 309        Piper Student  pip1011 student
+ 310        Quinn Student  qui2022 student
+ 311     Ethan Instructor  eth3033 teacher
+ 312      Liam Instructor  lia4044 teacher
+ 313   William Instructor  wil5055 teacher
+ 401   Eleanor Instructor  ele6677 teacher
+ 402        Logan Student  log7788 student
+ 901     Alice Instructor  ali9011 teacher
+ 902       Bob Instructor  bob9022 teacher
+ 903      Charlie Student  cha9033 student
+ 904        Diana Student  dia9044 student
+ 951     Emily Instructor  emi9511 teacher
+ 952     Frank Instructor  fra9522 teacher
+ 953       George Student  geo9533 student
+1001    Hannah Instructor  han1001 teacher
+1002       Ian Instructor  ian1002 teacher
+1003         Jack Student  jac1003 student
+
+Shape: 40 rows × 4 columns
+==========================================================================================
+
+=== TABLE: auth_credentials ===
+Attributes (Columns):
+  - id | INTEGER | nullable: False
+  - user_id | INTEGER | nullable: False
+  - password_hash | TEXT | nullable: False
+
+All Rows:
+ id  user_id                                                                                                                                                      password_hash
+  1      101 scrypt:32768:8:1$YugZhLDOg1ph4KEC$04735cf3f14f1c0e81941a263761fad86a6156949fcf5097f5e880124e66406810ec2a73ddc171be7d9db8eb857320a992405c3f5c47b51fa1e476fa95652b77
+  2      102 scrypt:32768:8:1$u9IBc2M4gCsl0GYn$b7f066fcaef24dc035650543ff67cef1496d640c4ac798ec13c2569fa0d4f473407a51c18bb95d923004dda3efa3b0de18779ea008476f1f889de99f9afef22a
+  3      103 scrypt:32768:8:1$db4fYOJ46ltrtPY6$23eeff5f7096ca2be61dc5576ac4007a9a5f141d2f7c936dd6f37b3a92bb31166e9a713df1bba600b84e1b4c95f5d53c6945c2cdea34ad5654c31c233840335f
+  4      104 scrypt:32768:8:1$OtDjB171qeABRKiH$694548a2646f4a74d718537979d4b585070135644f7a39dc367d3739302b2cb6f09af3945e0225ad30786f834b39c9fa33bb52191e5eb4338b4ff4bd69bcc38a
+  5      105 scrypt:32768:8:1$hsF5zZTDa6llLnwi$e32963d87580a3eca246664bb8fca58399869b8b52c40712c8c44f7730b9d05363d8642faf1cc1f733c02860db608f67ee0bd0f18709e10cb39ff434e0c2e607
+  6      106 scrypt:32768:8:1$wYRnA05MhfC0gYRv$060214155fde9d14d1bda784b0b82ecbb4f45a1af8f6b009abb0c0a72ec75e9c3f5207bae7e9d5e3393600433f0e47d3f1b76507776521c8abf52005a21ab9f6
+  7      107 scrypt:32768:8:1$TYPDqUQm0QhSaUzh$d12a0d86ef7be1a4adf6b6cd000a372225d16f75268d4c5d998d84e68b8d6c7bf6cdef0207616ab7444fc43138e7cfe410131e2450a286a43bd143ad4a95b488
+  8      108 scrypt:32768:8:1$7PA6Q07zdQL1eDpy$b1e7d88bb48638c5586172908829aa4185a73bc628e2df62072f9d50c09be8198e92754b1bd05fa4b23cab69d3bd6d320bd76ebb28530630919b8834f6beeb50
+  9      109 scrypt:32768:8:1$fPuuFtsXkhJieuVI$25473b3e46a98fb353e38de3ec2c2425903a64db7e53c416ada23df0ffb576ea12d62169e4a35fc456eed9f2c0dcf7275adfe4566f266fff81c91b88058c2de3
+ 10      110 scrypt:32768:8:1$8ITw9s6jz7QWsplR$56336b1789401b98357e91204cfc1f214f1eb0c914c7319b36b7d80ecfa9fca099736efafd20250a525557a4ebb689940641436df8eb10356080b63b4e77bf4a
+ 11      111 scrypt:32768:8:1$RO4T2h46ha20iciu$87d2fc3b2e3745985104cf984e4a2445c2ff29c3bf23b01161381f13ff2358a08d366af25a17fd9834c7e85300e29b7b73021c3150ef415b92fff3ecf037dcf3
+ 12      112 scrypt:32768:8:1$W7pulm7cWM7C8DNm$a271c39e73b4b639d73540eecc98ef1f11288c4a8fadaaa8185bc4a937c2b78ed1f531cf98fff12002a6d516c5ce3f901d32f6cb85917cf41d81b172de74a8b3
+ 13      113 scrypt:32768:8:1$cebImI3nfZSx6Jy5$8199986ca81b21a00af7cbc4b457f7c570a26d757523dc659af78944ab0d4fe2e3049224ac306419515bd16e571f9e4a956ad2e87e06648f98fc5d442c8c9deb
+ 14      114 scrypt:32768:8:1$1J5HrE1bhnrxbMUW$9579efa098290e872b83b14ec758a7506f33e61585f348dfa0ed085c22cc023b4e65bc04458c9b26f0cffc67f23d39589c38ce3c8e194d8ae9eda53eb2d1872d
+ 15      115 scrypt:32768:8:1$aGXHWE7TOERC8uHn$ff241157d30b42684b8c9da27032597710235d018f70a423abb9e58b05e66d17efe9823a9fb6758cc0ddc06e97f720ae6c526f178dd0022cd06c5da76a23f8a2
+ 16      301 scrypt:32768:8:1$IEjv8ASY9iA5S4cv$c458ac04049f086dfb80bcd8a71f5112013d3ca3c79286b7babf6bb00ce6afd7617ac522d2f9940744b265366fb7ee1f9aa9ee3b9db819be6a67191e964d1d8d
+ 17      302 scrypt:32768:8:1$k32bHoYMSNpeCCqJ$128fe88a2001308095c00e92bb12ae272c8007059f12d3a158e8a92657124638c4394c1314b1d21199adb2c9b15ccf23ab01499a5e82583d43c586e2ea2ffbae
+ 18      303 scrypt:32768:8:1$5MdXP64UveFoLSNC$430366c8bd2c2b2e2eb278b51873dbe34476451305028f09b292145a6082ede5f637aba3be968fb5f744764f5da18d6853296533d883480b64e530139209d733
+ 19      304 scrypt:32768:8:1$X5tSJmJJF4aGalVm$bab2b93b82a760d72b04da981b5d82817d3a8737c941c29c1e7e277e119a441d2236fd0f75f302b897e2d5ed335bb84a52384acac31cec9ba4493da718e283a6
+ 20      305 scrypt:32768:8:1$g7OTXXG5o3v56C7y$932ac128b4995dea12543eaa818428ad8a540b69e4827eb6d907e9138a10ad7029f169e35b1a4b1ae03c609b1bfe416672580b72f193d48973260d2fdd64c9ad
+ 21      306 scrypt:32768:8:1$ovSjOUmKFMy2ADR2$24e4fd2cc5d9bbbe1925028f93c27242539e4d6243c08e8f4496e06ea8107076b64d9488035f9498a0c8ea2237de92ead46b7d19c694f057d888382227b13f82
+ 22      307 scrypt:32768:8:1$a9AbLzx6Lvf2WdmF$6d140042cc1f074dd0ba23dc21b7fa811ff4d142dde45fddbb36f197f6b68042b2f24e7b3b0b6047a95d7dcd3b76f8946300a0748b3952d89afdfb26e4279d24
+ 23      308 scrypt:32768:8:1$BP6io5SwVBPoBHNL$26e4ace3fc7f0d78fc465df60492e7bde01896c1ae73e97aede1ad2e31f6afa3929e2fd761572fd472a7ad82aecad5c24105d29276edaa28313724152563c7a8
+ 24      309 scrypt:32768:8:1$5pcEp4NVV7tyL8sk$884b3bee0119c73c4ed1b4f8f748ccc7bf6f00c17b2b69c62a1e2c4ce753e7798097edb50ad9c9025ae65620d649411764ec43f5603c2c37fc9f2d65e7df54b0
+ 25      310 scrypt:32768:8:1$pyLMIJUIPPlz1iaR$eacbacd1c3e67988cd61c3fbe7871f8712d03cd50e71c6ccd34a39ab2581ee2c3790f3b8da78e7a6bfe9efb708eb39503a50878e6a6b96d1d4bcdbd2cd3482b9
+ 26      311 scrypt:32768:8:1$2v6LzvElVyoDIKkL$fd64bf12fe563c98696d5a023623d0e037347832e7ec934119e34ddf7f98621a1b3303b82c09aa3f7346e712fba6ee86e03b741657fbe5ee163abf505db5b721
+ 27      312 scrypt:32768:8:1$xZeLAEKCBGs3cD0S$5b3760cc85fd8420eee062d7f0be7686be2fca593f22d630a72f488cd5510d2d39dfa8dc8921b2f4d96524a67f2947185b1406e36258ebb34690291689f8cced
+ 28      313 scrypt:32768:8:1$Ay2zA84zz1E67mFN$f4638366bb4fc5938b2af5be070df1447ff94d73961b0d3eeff600de636fec686f6133a8a1949220bbd59ae82e9243fd1050854f23d374d3072865ad5041c0f3
+ 29      401 scrypt:32768:8:1$8UEadIKiLqMN44Te$970201bab335448874c2b98cfd6ec7d4289047fd91b275d98affcf75add1cf66b5927de6f4290955db17ad6810a572f946b5583c678fe4ca003a92fdb1b295c5
+ 30      402 scrypt:32768:8:1$fwAWugMfR2pNQ3f9$7505b77c219b244932c9908f29556594c49f93fe601b43162e82a7f7e3451a943831c72526f3aa5db07801cdfffec6548985ad9df49b5e2e2ef5d114bee67e22
+ 31      901 scrypt:32768:8:1$SL8rB8Bn69Xo8QXW$59b6d85b73a765942866dc06d1295fdaa68e6c689f83077ce3d7e94ac9e51e35d7842358614dd1c90b4b6a0a074e8618f0f378a687ae3b22eac2320067e2f8b4
+ 32      902 scrypt:32768:8:1$j8bMlAsZgaDE2KDR$e0c0086daf3f233f3eacf698878d184fce225fa0d9a2412964f3c168f90aeed9d904022103887f040b58a0032385f90b1beab907a184a9734305377a6fe71879
+ 33      903 scrypt:32768:8:1$vog9phJxlhVU7Cq5$058a89f2bd3577c1bc35a636c54583588c8001f5b2c2ac8b7542eefed220b0199cad84cad560722508cbcc6b5058e2c56d04bb9af2bc527ccb8edd508b6e0d27
+ 34      904 scrypt:32768:8:1$2G7minOJZe8OxcxJ$a3700903f6eefa373d58e9376abd786cfedf6001d92b48a3933e6ca880daec6bbb304fb34c18a5946390800d3f66be87b4c44fc75b66f1521d619d0913f39cd3
+ 35      951 scrypt:32768:8:1$X1n2fSbwHxYrYqTf$f3605899cfd3a7b8dfb8481f30847a599db784b2eb730bf07ba2b208628eecdb3ee3a62b79d7aec4f2374bb9d137c3edd916882a878ce050c62300ed2023706f
+ 36      952 scrypt:32768:8:1$KFeelSoEnfEuRB5h$ab30bae35faa92cf90079c5c8e63ba0b2ff6b700daa854059baf4715d67891185c6ba1ec206ed3e5bcfa9baaa8478aec148ebb39cbcacd5b2500109acab71e7a
+ 37      953 scrypt:32768:8:1$OloSLa71fR6nCHNy$300a1f525c2fc15a4b9d34d2ab52b910a280c1b091516249cf63cdd44752dc7a38ea76b0dc66d01428191fd00b3834b18c3f85fbef88cb63983d159d5e419b0a
+ 38     1001 scrypt:32768:8:1$tYELTUGOpIudVCpB$97f170dff518188bcf00dd33534a7238ab043e4cde59648b797a1fa15455e851cdb42a412f8ccf61483bbc73b565b76f7a09bc4b82746ad0c4679e29ca19b661
+ 39     1002 scrypt:32768:8:1$HwIxXE5PlPHZL1mp$9dec2499c53743f80a98e6ac6f4af1202b6a0829a5dadf99bcb9b24add979f0cf08af9ccece8bc38ba91dff86884b4bd8d076865f3f3e10eacd66d4237ba8fb9
+ 40     1003 scrypt:32768:8:1$vgQ9t6l13ZySoqlw$5c023f615bb1f9b4e77b89d62bddc17b4fb8527efe717b75134f44b3ca09347ecefcc1ba7c70be5366f63ef35c934950de92e557d1e00fe04b7223f730c19c14
+
+Shape: 40 rows × 3 columns
+==========================================================================================

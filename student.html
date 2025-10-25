@@ -1,228 +1,304 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>RU Attendance • Student</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ru-red:#cc0033; --ru-red-600:#b3002c; --ring:rgba(204,0,51,.28);
-    --text:#e5e7eb; --ink:#0b0c0e;
-    --bg-img: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2000&auto=format&fit=crop');
-    --card: rgba(255,255,255,.12);
-    --card-border: rgba(255,255,255,.22);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans"; background:#0b0c0e; color:#111827; overflow-x:hidden}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Student Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
-  /* Topbar */
-  .topbar{position:fixed; inset:0 0 auto 0; height:64px; z-index:20; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 18px; color:#fff; background:linear-gradient(180deg, rgba(0,0,0,.6), rgba(0,0,0,0)); backdrop-filter:saturate(120%) blur(2px)}
-  .brand{display:flex; align-items:center; gap:12px; color:#fff; text-decoration:none}
-  .brand-logo{width:36px; height:36px; display:grid; place-items:center; border-radius:10px; background:var(--ru-red); color:#fff; font-weight:800; letter-spacing:.3px; box-shadow:0 8px 24px rgba(204,0,51,.45)}
-  .brand span{font-weight:700}
-  .btn{appearance:none; border:1px solid transparent; border-radius:12px; padding:10px 14px; font-weight:700; font-size:14px; display:inline-flex; align-items:center; gap:8px; text-decoration:none; transition:.2s; cursor:pointer}
-  .btn.outline{color:#fff; border-color:rgba(255,255,255,.25); background:rgba(0,0,0,.25)}
-  .btn.white{background:#fff; color:#111827}
-  .btn.ru{background:var(--ru-red); color:#fff}
-  .btn.ru:hover{background:var(--ru-red-600); transform:translateY(-1px)}
-  .top-actions{display:flex; gap:10px}
+  <style>
+    :root {
+      --ru-red: #cc0033;
+      --ru-red-dark: #a60029;
+      --status-present: #28a745;
+      --status-absent: #dc3545;
+    }
 
-  /* Full-bleed background */
-  .cover{position:relative; min-height:100vh; display:grid; grid-template-columns:minmax(0,1fr); align-items:start; padding:64px 18px 32px; isolation:isolate}
-  .cover::before{content:""; position:absolute; inset:0; z-index:-2; background-image:var(--bg-img); background-size:cover; background-position:center; background-repeat:no-repeat; transform:scale(1.02)}
-  .cover::after{content:""; position:absolute; inset:0; z-index:-1; background:radial-gradient(1000px 600px at 10% -10%, rgba(204,0,51,.18), transparent 55%), linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.65) 55%, rgba(0,0,0,.85))}
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: url('https://images.unsplash.com/photo-1581091870627-dbc6d7f0e213?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat fixed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #343a40;
+    }
 
-  .wrap{width:min(1200px,94vw); margin:0 auto; display:grid; gap:22px}
+    body::before {
+      content:"";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: -1;
+    }
 
-  /* Glass cards */
-  .glass{color:#fff; border-radius:22px; overflow:hidden; background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.12); box-shadow:0 25px 80px rgba(0,0,0,.45); padding:24px}
-  .card{background:var(--card); border:1px solid var(--card-border); color:#fff; border-radius:18px; padding:20px; backdrop-filter: blur(8px) saturate(120%); box-shadow:0 18px 70px rgba(0,0,0,.45)}
-  .heading{margin:0 0 6px; font-size:28px}
-  .muted{color:#e5e7ebcc}
-  .grid{display:grid; gap:16px; grid-template-columns: repeat(3,1fr)}
-  @media (max-width:980px){.grid{grid-template-columns:1fr 1fr}}
-  @media (max-width:620px){.grid{grid-template-columns:1fr}}
+    .banner {
+      background-color: var(--ru-red-dark);
+      text-align: center;
+      padding: 0.8rem 0;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
 
-  /* Subject card */
-  .subject{display:flex; flex-direction:column; gap:12px}
-  .subject .title{display:flex; align-items:baseline; justify-content:space-between; gap:12px}
-  .code{font-weight:800; letter-spacing:.3px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); padding:6px 10px; border-radius:999px}
-  .big{font-size:18px; font-weight:800}
-  .stat{font-weight:700}
-  .bar{height:10px; border-radius:999px; background:rgba(255,255,255,.18); overflow:hidden; border:1px solid rgba(255,255,255,.25)}
-  .bar > span{display:block; height:100%; background:linear-gradient(90deg, #22c55e, #84cc16); width:0}
-  .row{display:flex; gap:10px; flex-wrap:wrap}
-  .pill{display:inline-flex; align-items:center; gap:8px; padding:8px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.28); background:rgba(0,0,0,.25); color:#fff; text-decoration:none; font-weight:700; cursor:pointer}
-  .pill:hover{border-color:#fff}
+    .navbar {
+      background-color: var(--ru-red);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
 
-  /* Table */
-  table{width:100%; border-collapse:separate; border-spacing:0 10px}
-  th, td{padding:12px 14px; text-align:left; color:#fff}
-  thead th{font-size:13px; color:#e5e7ebcc; font-weight:700}
-  tbody tr{background:var(--card); border:1px solid var(--card-border)}
-  tbody tr td:first-child{border-radius:12px 0 0 12px}
-  tbody tr td:last-child{border-radius:0 12px 12px 0}
+    .navbar-brand {
+      font-weight: 700;
+      color: #fff !important;
+      font-family: 'Roboto Slab', serif;
+      letter-spacing: 0.7px;
+    }
 
-  .kpi{display:flex; gap:14px; flex-wrap:wrap}
-  .kpi .bubble{display:flex; flex-direction:column; gap:6px; background:var(--card); border:1px solid var(--card-border); border-radius:14px; padding:14px 16px}
-  .kpi .value{font-size:22px; font-weight:800}
-  .right{margin-left:auto; display:flex; gap:10px}
-</style>
+    .btn-logout {
+      background: #fff;
+      color: var(--ru-red);
+      font-weight: 600;
+      transition: 0.3s;
+      border-radius: 8px;
+    }
+
+    .btn-logout:hover {
+      background: #f8f9fa;
+      transform: translateY(-2px);
+    }
+
+    .dashboard {
+      max-width: 1200px;
+      margin: 3rem auto;
+      background: rgba(255,255,255,0.95);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      backdrop-filter: blur(5px);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    h2 {
+      font-weight: 700;
+      font-family: 'Roboto Slab', serif;
+      color: var(--ru-red);
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
+
+    h4 {
+      font-weight: 600;
+      color: var(--ru-red-dark);
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
+
+    .summary-table {
+      margin-bottom: 2rem;
+    }
+
+    .summary-table th, .summary-table td {
+      text-align: center;
+      vertical-align: middle;
+    }
+
+    .table {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      background: #fff;
+    }
+
+    .table:hover {
+      transform: scale(1.01);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    }
+
+    thead {
+      background-color: var(--ru-red);
+      color: #fff;
+    }
+
+    tbody tr:hover {
+      background-color: #fbe8eb;
+      transition: 0.2s;
+    }
+
+    th, td {
+      vertical-align: middle !important;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .badge-status {
+      padding: 0.45em 0.8em;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9em;
+      color: #fff;
+      transition: all 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .badge-present {
+      background-color: var(--status-present);
+      animation: pulse 2s infinite;
+    }
+    .badge-absent {
+      background-color: var(--status-absent);
+      animation: shake 0.8s infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      75% { transform: translateX(3px); }
+    }
+
+    footer {
+      background-color: var(--ru-red-dark);
+      color: #fff;
+      text-align: center;
+      padding: 1rem 0;
+      margin-top: auto;
+      font-size: 0.95rem;
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+    }
+
+    footer a { color: #fff; text-decoration: underline; }
+
+    #courseFilter {
+      transition: all 0.3s ease;
+    }
+
+    #courseFilter:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+  </style>
 </head>
+
 <body>
-<header class="topbar">
-  <a class="brand" href="login.html">
-    <div class="brand-logo">R</div><span>Rutgers Attendance</span>
-  </a>
-  <nav class="top-actions">
-    <a class="btn outline" href="#">Status &amp; Alerts</a>
-    <a class="btn white" href="#" id="logoutBtn">Logout</a>
-    <a class="btn ru" href="teacher.html" title="Switch to teacher (demo)">Teacher View</a>
-  </nav>
-</header>
+  <div class="banner">Rutgers University | Attendance Management Portal</div>
 
-<main class="cover">
-  <div class="wrap">
-    <!-- Header glass with student summary -->
-    <section class="glass" id="summary">
-      <h1 class="heading" id="welcome">Student Dashboard</h1>
-      <p class="muted" id="subcopy">Loading…</p>
-      <div class="kpi" id="kpis">
-        <!-- KPI bubbles injected by JS -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <span class="navbar-brand">Student Dashboard</span>
+      <div class="ms-auto">
+        <a href="/logout" class="btn btn-logout">Logout</a>
       </div>
-    </section>
-
-    <!-- Subjects grid -->
-    <section class="grid" id="subjects">
-      <!-- Subject cards injected by JS -->
-    </section>
-
-    <!-- Table view -->
-    <section class="glass">
-      <h2 style="margin:0 0 10px; color:#fff">Your subjects</h2>
-      <div class="muted" style="margin-bottom:10px">Click a subject to open details (placeholders for now).</div>
-      <div class="card" style="padding:0">
-        <table>
-          <thead>
-            <tr>
-              <th>Code</th>
-              <th>Title</th>
-              <th>Attendance</th>
-              <th>Sessions</th>
-              <th></th>
-            </tr>
-          </thead>
-          <tbody id="subjectsTable"></tbody>
-        </table>
-      </div>
-    </section>
-  </div>
-</main>
-
-<script>
-  // Ensure we have student data
-  function ensureStudent() {
-    let s = localStorage.getItem("ru_student");
-    if (s) return JSON.parse(s);
-    const fallback = {
-      email: "netid@rutgers.edu",
-      name: "Jane Doe",
-      subjects: [
-        { code: "CS101", title: "Intro to CS", attendance: 92, totalSessions: 24, attended: 22 },
-        { code: "MATH201", title: "Discrete Math", attendance: 88, totalSessions: 25, attended: 22 },
-        { code: "BIO110", title: "Biology Lab", attendance: 95, totalSessions: 20, attended: 19 }
-      ]
-    };
-    localStorage.setItem("ru_student", JSON.stringify(fallback));
-    return fallback;
-  }
-
-  const student = ensureStudent();
-
-  // Basic metrics
-  const avg = Math.round(
-    student.subjects.reduce((a,s)=>a+s.attendance,0) / student.subjects.length
-  );
-  const totalClasses = student.subjects.reduce((a,s)=>a+s.totalSessions,0);
-  const totalAttended = student.subjects.reduce((a,s)=>a+s.attended,0);
-
-  // Populate header
-  document.getElementById('welcome').textContent = `Welcome, ${student.name}`;
-  document.getElementById('subcopy').textContent = `${student.email} • ${student.subjects.length} subjects this term`;
-
-  // KPI bubbles
-  const kpis = document.getElementById('kpis');
-  kpis.innerHTML = `
-    <div class="bubble"><div class="label muted">Average attendance</div><div class="value">${avg}%</div></div>
-    <div class="bubble"><div class="label muted">Sessions attended</div><div class="value">${totalAttended}/${totalClasses}</div></div>
-    <div class="bubble"><div class="label muted">Subjects</div><div class="value">${student.subjects.length}</div></div>
-    <div class="right">
-      <a class="btn ru" href="#" onclick="alert('Coming soon: download summary PDF');return false;">Download summary</a>
     </div>
-  `;
+  </nav>
 
-  // Render subject cards
-  const grid = document.getElementById('subjects');
-  grid.innerHTML = student.subjects.map((s, i) => {
-    const pct = Math.max(0, Math.min(100, s.attendance));
-    return `
-      <article class="card subject" data-code="${s.code}">
-        <div class="title">
-          <div class="big">${s.title}</div>
-          <span class="code">${s.code}</span>
-        </div>
-        <div class="muted">Attendance</div>
-        <div class="bar" aria-label="attendance"><span style="width:${pct}%"></span></div>
-        <div class="muted"><span class="stat">${pct}%</span> • ${s.attended}/${s.totalSessions} sessions</div>
-        <div class="row">
-          <a class="pill" href="#" onclick="openSubject('${s.code}');return false;">Open class</a>
-          <a class="pill" href="#" onclick="viewHistory('${s.code}');return false;">View history</a>
-        </div>
-      </article>
-    `;
-  }).join('');
+  <div class="dashboard container">
+    <h2>Welcome, {{ username }}</h2>
 
-  // Table view
-  const tbody = document.getElementById('subjectsTable');
-  tbody.innerHTML = student.subjects.map(s => `
-    <tr>
-      <td><strong>${s.code}</strong></td>
-      <td>${s.title}</td>
-      <td>${s.attendance}%</td>
-      <td>${s.attended}/${s.totalSessions}</td>
-      <td style="text-align:right">
-        <a class="pill" href="#" onclick="openSubject('${s.code}');return false;">Open</a>
-      </td>
-    </tr>
-  `).join('');
+    {% if summary %}
+    <h4>Attendance Summary</h4>
+    <div class="table-responsive summary-table">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Course Title</th>
+            <th>Total Sessions</th>
+            <th>Classes Attended</th>
+            <th>Attendance %</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in summary %}
+          <tr>
+            <td>{{ s.code }}</td>
+            <td>{{ s.title }}</td>
+            <td>{{ s.total_sessions }}</td>
+            <td>{{ s.attended }}</td>
+            <td>{{ "%.2f"|format(s.attendance_percent) }}%</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
 
-  // Actions (stubs for now)
-  function openSubject(code){
-    // Save selected subject for a future subject_detail.html
-    localStorage.setItem('ru_selected_subject', code);
-    alert('Opening ' + code + ' (subject detail page coming next).');
-    // location.href = 'subject.html'; // use when you create it
-  }
-  function viewHistory(code){
-    alert('Attendance history for ' + code + ' (coming soon).');
-  }
+    <div class="mb-3">
+      <label for="courseFilter" class="form-label"><strong>Filter by Course:</strong></label>
+      <select class="form-select" id="courseFilter" onchange="filterCourse()">
+        <option value="">All Courses</option>
+        {% for code, title in course_list %}
+          <option value="{{ code }}">{{ title }}</option>
+        {% endfor %}
+      </select>
+    </div>
 
-  // Logout returns to login
-  document.getElementById('logoutBtn').addEventListener('click', (e)=>{
-    e.preventDefault();
-    // In real app, clear auth token; keep demo data for convenience
-    location.href = 'login.html';
-  });
+    <div class="table-responsive">
+      <table id="attendanceTable" class="table table-bordered align-middle">
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Course Title</th>
+            <th>Term</th>
+            <th>Instructor</th>
+            <th>Meeting</th>
+            <th>Session Date</th>
+            <th>Attendance Status</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for e, s, c, t, sess, a in enrollments %}
+          <tr data-course="{{ c.code }}">
+            <td>{{ c.code }}</td>
+            <td>{{ c.title }}</td>
+            <td>{{ t.name }}</td>
+            <td>{{ s.instructor.name }}</td>
+            <td>{{ s.meeting_days }} {{ s.start_time }} - {{ s.end_time }} ({{ s.room }})</td>
+            <td>{{ sess.session_date }}</td>
+            <td>
+              {% if a.status.lower() == 'present' %}
+                <span class="badge-status badge-present">Present</span>
+              {% else %}
+                <span class="badge-status badge-absent">Absent</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 
-  // Animate bars after paint
-  requestAnimationFrame(()=>{
-    document.querySelectorAll('.bar > span').forEach(el=>{
-      const w = el.style.width; el.style.width='0';
-      setTimeout(()=>{ el.style.transition='width .8s ease'; el.style.width = w; }, 0);
-    });
-  });
-</script>
+  <footer>
+    © {{ year }} Rutgers Attendance Portal. All rights reserved. |
+    <a href="https://www.rutgers.edu" target="_blank">rutgers.edu</a>
+  </footer>
+
+  <script>
+    function filterCourse() {
+      const selected = document.getElementById('courseFilter').value;
+      const rows = document.querySelectorAll('#attendanceTable tbody tr');
+      rows.forEach(row => {
+        row.style.display = (selected === "" || row.dataset.course === selected) ? '' : 'none';
+      });
+    }
+  </script>
 </body>
 </html>

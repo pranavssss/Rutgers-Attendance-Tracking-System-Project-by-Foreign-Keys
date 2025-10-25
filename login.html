@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rutgers Attendance Tracking System • Login</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --ru-red: #cc0033;
+      --ru-red-600: #b3002c;
+      --ring: rgba(204,0,51,.28);
+      --input-bg: rgba(255,255,255,0.08);
+      --input-border: rgba(255,255,255,0.3);
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #1a1a1a, #2c2c2c, #1a1a1a);
+      animation: gradientBG 20s ease infinite;
+      position: relative;
+      overflow: hidden;
+    }
+    @keyframes gradientBG {
+      0% {background-position:0% 50%;}
+      50% {background-position:100% 50%;}
+      100% {background-position:0% 50%;}
+    }
+    body::before {
+      content:"";
+      position:absolute;
+      inset:0;
+      background:url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat;
+      filter: brightness(0.5) blur(4px);
+      z-index:0;
+    }
+
+    .login-container {
+      position: relative;
+      z-index:1;
+      text-align:center;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:1rem;
+      padding:1rem;
+      animation: fadeInUp 1s ease forwards;
+    }
+    @keyframes fadeInUp {
+      from { opacity:0; transform: translateY(20px); }
+      to { opacity:1; transform: translateY(0); }
+    }
+
+    .logo { width: 180px; margin-bottom:0.5rem; }
+    .title {
+      font-weight:800;
+      font-size:1.7rem;
+      text-transform:uppercase;
+      color:#fff;
+      text-shadow:0 2px 6px rgba(0,0,0,0.6);
+      margin-bottom:1.5rem;
+    }
+
+    .login-card {
+      background: rgba(255,255,255,0.12);
+      border-radius:20px;
+      padding:2.5rem;
+      max-width:420px;
+      width:100%;
+      backdrop-filter:blur(14px) saturate(150%);
+      border:1px solid rgba(255,255,255,0.25);
+      box-shadow:0 30px 60px rgba(0,0,0,0.45);
+      text-align:left;
+      transition: transform 0.3s;
+    }
+    .login-card:hover { transform: translateY(-4px); }
+
+    h3 {
+      text-align:center;
+      font-weight:700;
+      margin-bottom:2rem;
+      color:#fff;
+      letter-spacing: 0.5px;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom:1.5rem;
+    }
+    .form-control, .form-select {
+      width:100%;
+      padding:0.9rem 1rem;
+      border-radius:12px;
+      border:1px solid var(--input-border);
+      background: var(--input-bg);
+      color:#fff;
+      font-size:0.95rem;
+      outline:none;
+      transition:border-color 0.3s, box-shadow 0.3s;
+    }
+    .form-control:focus, .form-select:focus {
+      border-color: var(--ru-red);
+      box-shadow:0 0 0 3px var(--ring);
+      background: rgba(255,255,255,0.15);
+    }
+
+    .form-group label {
+      position: absolute;
+      top:50%;
+      left:1rem;
+      transform: translateY(-50%);
+      color: rgba(255,255,255,0.6);
+      font-size:0.9rem;
+      pointer-events: none;
+      transition: 0.3s all;
+      background: transparent;
+      padding: 0 0.25rem;
+    }
+    .form-control:focus + label,
+    .form-control:not(:placeholder-shown) + label,
+    .form-select:focus + label,
+    .form-select:not([value=""]) + label {
+      top:-0.6rem;
+      left:0.9rem;
+      font-size:0.75rem;
+      color:#fff;
+      background: rgba(0,0,0,0.25);
+      border-radius:4px;
+      padding:0 0.25rem;
+    }
+
+    .btn-primary {
+      width:100%;
+      background-color:var(--ru-red);
+      border:none;
+      padding:0.85rem;
+      font-weight:700;
+      border-radius:14px;
+      color:#fff;
+      cursor:pointer;
+      font-size:1rem;
+      transition: background-color 0.3s, transform 0.2s;
+    }
+    .btn-primary:hover { background-color:var(--ru-red-600); transform:translateY(-1px); }
+
+    .alert {
+      background: rgba(255, 60, 60, 0.12);
+      border: 1px solid rgba(255, 80, 80, 0.4);
+      color: #ffbfbf;
+      border-radius: 12px;
+      padding: 0.85rem;
+      text-align: center;
+      margin-bottom: 1rem;
+    }
+
+    .checkbox {
+      display:flex;
+      align-items:center;
+      gap:0.5rem;
+      font-size:0.9rem;
+      margin-bottom:1rem;
+      color:#fff;
+    }
+    .checkbox input { accent-color: var(--ru-red); }
+
+    .forgot-link {
+      display:block;
+      text-align:right;
+      font-size:0.85rem;
+      margin-bottom:1rem;
+      color:#fff;
+      text-decoration:underline;
+      cursor:pointer;
+    }
+
+    .social-buttons {
+      display:flex;
+      justify-content:space-between;
+      margin-top:1rem;
+      gap:0.5rem;
+    }
+    .social-btn {
+      flex:1;
+      padding:0.7rem;
+      border-radius:12px;
+      font-weight:600;
+      border:none;
+      cursor:pointer;
+      transition: transform 0.2s, filter 0.2s;
+      color:#fff;
+      font-size:0.9rem;
+    }
+    .social-btn.google { background:#db4437; }
+    .social-btn.google:hover { transform:translateY(-2px); filter: brightness(1.05); }
+    .social-btn.microsoft { background:#2F2F9C; }
+    .social-btn.microsoft:hover { transform:translateY(-2px); filter: brightness(1.05); }
+
+    .divider {
+      display:flex;
+      align-items:center;
+      text-align:center;
+      margin: 1.5rem 0;
+      color: rgba(255,255,255,0.6);
+      font-size:0.85rem;
+    }
+    .divider::before, .divider::after {
+      content:"";
+      flex:1;
+      border-bottom:1px solid rgba(255,255,255,0.3);
+    }
+    .divider::before { margin-right:0.75em; }
+    .divider::after { margin-left:0.75em; }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+    <img src="{{ url_for('static', filename='images/RU_H_2LINE_RED_BLACK_CMYK.png') }}" alt="Rutgers Logo" class="logo">
+    <div class="title">Rutgers Attendance Tracking System</div>
+
+    <div class="login-card">
+      <h3>Login</h3>
+
+      {% if error %}
+        <div class="alert">{{ error }}</div>
+      {% endif %}
+
+      <form method="POST">
+        <div class="form-group">
+          <input type="text" class="form-control" name="identifier" placeholder=" " required>
+          <label>Email or NetID</label>
+        </div>
+        <div class="form-group">
+          <input type="password" class="form-control" name="password" placeholder=" " required>
+          <label>Password</label>
+        </div>
+        <div class="form-group">
+          <select class="form-select" name="role" required>
+            <option value="" disabled selected hidden></option>
+            <option value="student">Student</option>
+            <option value="teacher">Teacher</option>
+            <option value="admin">Admin</option>
+          </select>
+          <label>Select Role</label>
+        </div>
+
+        <div class="checkbox">
+          <input type="checkbox" id="remember" name="remember">
+          <label for="remember">Remember Me</label>
+        </div>
+
+        <a class="forgot-link" href="#">Forgot Password?</a>
+
+        <button type="submit" class="btn-primary">Login</button>
+
+        <div class="divider">Or continue with</div>
+
+        <div class="social-buttons">
+          <button type="button" class="social-btn google">Google</button>
+          <button type="button" class="social-btn microsoft">Microsoft</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</body>
+</html>

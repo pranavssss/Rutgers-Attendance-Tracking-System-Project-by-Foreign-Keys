@@ -1,0 +1,28 @@
+# Rutgers Attendance Management System — Midterm README (Short)
+
+## What we’re submitting
+
+* *Codebase* (Flask + PostgreSQL) with role-based login (Student/Teacher)
+* *Midterm demo video* (end-to-end UI using seeded data)
+* *ER Diagram & Schema Diagram* (PDF/PNG)
+* *Sample “final-version” HTML pages* showing dynamic forms/flows (preview only)
+
+---
+
+## What’s in the Midterm submission (current)
+
+* *Auth & Routing:* Login with role selection; hashed passwords; redirects to Student/Teacher dashboards.
+* *Student View (read-only):* Enrolled courses, per-course attendance %, daily history.
+* *Teacher View (read-only):* Courses taught, roster with student attendance %, session list, basic summaries.
+* *Data source:* All values *seeded via SQL* (no create/edit from the UI).
+* *Tech:* Flask (Jinja templates), PostgreSQL (init.sql for schema + seed).
+
+---
+
+## How the Final submission differs (preview we’re including)
+
+* *Dynamic data entry:* Forms write to DB (no longer just seeded data). - Use of a Admin Role
+* *Teacher tools:* Date-picker to mark attendance for a chosen class date; optional bulk CSV upload; edit past entries with audit note.
+* *Student tools:* CSV download of personal attendance; request a correction for a specific date.
+* *Quality-of-life/analytics:* Quick stats and at-risk flags (< threshold).
+* ⁠Admin role added to the login, who can dynamically insert values into the enrollment table, via a dolled Gform, or Excel.

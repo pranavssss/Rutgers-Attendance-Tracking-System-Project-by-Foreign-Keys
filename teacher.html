@@ -1,393 +1,293 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width, initial-scale=1"/>
-<title>RU Attendance • Teacher</title>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ru-red:#cc0033; --ru-red-600:#b3002c; --ring:rgba(204,0,51,.28);
-    --text:#e5e7eb; --ink:#0b0c0e;
-    --bg-img: url('https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?q=80&w=2000&auto=format&fit=crop');
-    --card: rgba(255,255,255,.12);
-    --card-border: rgba(255,255,255,.22);
-  }
-  *{box-sizing:border-box}
-  html,body{height:100%}
-  body{margin:0; font-family:Inter, system-ui, -apple-system, Segoe UI, Roboto, Arial, "Noto Sans"; background:#0b0c0e; color:#111827; overflow-x:hidden}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Teacher Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Roboto+Slab:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
-  /* Topbar */
-  .topbar{position:fixed; inset:0 0 auto 0; height:64px; z-index:20; display:flex; align-items:center; justify-content:space-between; gap:12px; padding:12px 18px; color:#fff; background:linear-gradient(180deg, rgba(0,0,0,.6), rgba(0,0,0,0)); backdrop-filter:saturate(120%) blur(2px)}
-  .brand{display:flex; align-items:center; gap:12px; color:#fff; text-decoration:none}
-  .brand-logo{width:36px; height:36px; display:grid; place-items:center; border-radius:10px; background:var(--ru-red); color:#fff; font-weight:800; letter-spacing:.3px; box-shadow:0 8px 24px rgba(204,0,51,.45)}
-  .brand span{font-weight:700}
-  .btn{appearance:none; border:1px solid transparent; border-radius:12px; padding:10px 14px; font-weight:700; font-size:14px; display:inline-flex; align-items:center; gap:8px; text-decoration:none; transition:.2s; cursor:pointer}
-  .btn.outline{color:#fff; border-color:rgba(255,255,255,.25); background:rgba(0,0,0,.25)}
-  .btn.white{background:#fff; color:#111827}
-  .btn.ru{background:var(--ru-red); color:#fff}
-  .btn.ru:hover{background:var(--ru-red-600); transform:translateY(-1px)}
-  .top-actions{display:flex; gap:10px}
-
-  /* Full-bleed background */
-  .cover{position:relative; min-height:100vh; display:grid; grid-template-columns:minmax(0,1fr); align-items:start; padding:64px 18px 32px; isolation:isolate}
-  .cover::before{content:""; position:absolute; inset:0; z-index:-2; background-image:var(--bg-img); background-size:cover; background-position:center; background-repeat:no-repeat; transform:scale(1.02)}
-  .cover::after{content:""; position:absolute; inset:0; z-index:-1; background:radial-gradient(1000px 600px at 10% -10%, rgba(204,0,51,.18), transparent 55%), linear-gradient(180deg, rgba(0,0,0,.35), rgba(0,0,0,.65) 55%, rgba(0,0,0,.85))}
-
-  .wrap{width:min(1200px,94vw); margin:0 auto; display:grid; gap:22px}
-
-  /* Glass cards */
-  .glass{color:#fff; border-radius:22px; overflow:hidden; background:rgba(0,0,0,.35); border:1px solid rgba(255,255,255,.12); box-shadow:0 25px 80px rgba(0,0,0,.45); padding:24px}
-  .card{background:var(--card); border:1px solid var(--card-border); color:#fff; border-radius:18px; padding:20px; backdrop-filter: blur(8px) saturate(120%); box-shadow:0 18px 70px rgba(0,0,0,.45)}
-
-  .heading{margin:0 0 6px; font-size:28px}
-  .muted{color:#e5e7ebcc}
-  .kpi{display:flex; gap:14px; flex-wrap:wrap}
-  .kpi .bubble{display:flex; flex-direction:column; gap:6px; background:var(--card); border:1px solid var(--card-border); border-radius:14px; padding:14px 16px}
-  .kpi .value{font-size:22px; font-weight:800}
-  .right{margin-left:auto; display:flex; gap:10px}
-
-  /* Date bar */
-  .datebar{display:flex; align-items:center; gap:12px; flex-wrap:wrap}
-  .datebar .label{font-weight:800; letter-spacing:.3px}
-  .datebar input[type="date"]{
-    appearance:none; -webkit-appearance:none;
-    padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.28);
-    background:rgba(0,0,0,.25); color:#fff; outline:none; font-size:14px;
-    box-shadow:none; transition:border-color .15s, box-shadow .15s;
-  }
-  .datebar input[type="date"]:focus{border-color:var(--ru-red); box-shadow:0 0 0 4px var(--ring)}
-  .badge{display:inline-flex; align-items:center; gap:6px; padding:6px 10px; border-radius:999px; border:1px dashed rgba(255,255,255,.35); background:rgba(255,255,255,.08); font-weight:700; font-size:12px}
-
-  /* Grids */
-  .grid-classes{display:grid; gap:16px; grid-template-columns:repeat(3,1fr)}
-  @media (max-width:980px){.grid-classes{grid-template-columns:1fr 1fr}}
-  @media (max-width:620px){.grid-classes{grid-template-columns:1fr}}
-  .class-card{display:flex; flex-direction:column; gap:10px; cursor:pointer}
-  .class-row{display:flex; align-items:center; justify-content:space-between; gap:12px}
-  .code{font-weight:800; letter-spacing:.3px; background:rgba(255,255,255,.12); border:1px solid rgba(255,255,255,.25); padding:6px 10px; border-radius:999px}
-
-  /* Roster & history tables */
-  table{width:100%; border-collapse:separate; border-spacing:0 10px}
-  th, td{padding:12px 14px; text-align:left; color:#fff}
-  thead th{font-size:13px; color:#e5e7ebcc; font-weight:700}
-  tbody tr{background:var(--card); border:1px solid var(--card-border)}
-  tbody tr td:first-child{border-radius:12px 0 0 12px}
-  tbody tr td:last-child{border-radius:0 12px 12px 0}
-  .status {display:inline-flex; align-items:center; gap:6px; font-weight:700; padding:6px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.28)}
-  .present{background:rgba(34,197,94,.15)}
-  .late{background:rgba(234,179,8,.18)}
-  .absent{background:rgba(239,68,68,.18)}
-
-  /* Actions */
-  .actions{display:flex; gap:10px; flex-wrap:wrap}
-  .pill{display:inline-flex; align-items:center; gap:8px; padding:10px 12px; border-radius:12px; border:1px solid rgba(255,255,255,.28); background:rgba(0,0,0,.25); color:#fff; text-decoration:none; font-weight:700; cursor:pointer}
-  .pill:hover{border-color:#fff}
-</style>
-</head>
-<body>
-<header class="topbar">
-  <a class="brand" href="login.html">
-    <div class="brand-logo">R</div><span>Rutgers Attendance</span>
-  </a>
-  <nav class="top-actions">
-    <a class="btn outline" href="#">Status &amp; Alerts</a>
-    <a class="btn white" href="#" id="logoutBtn">Logout</a>
-    <a class="btn ru" href="student.html" title="Switch to student (demo)">Student View</a>
-  </nav>
-</header>
-
-<main class="cover">
-  <div class="wrap">
-
-    <!-- Teacher summary -->
-    <section class="glass" id="summary">
-      <h1 class="heading" id="welcome">Instructor Dashboard</h1>
-      <p class="muted" id="subcopy">Loading…</p>
-      <div class="kpi" id="kpis"></div>
-    </section>
-
-    <!-- Date selector (Mon–Fri only) -->
-    <section class="glass" id="dateSection">
-      <div class="datebar">
-        <span class="label">Choose date</span>
-        <input type="date" id="datePicker" />
-        <span class="badge" id="weekdayBadge">Weekday</span>
-        <span class="badge" id="termBadge">Fall 2025</span>
-      </div>
-      <p class="muted" style="margin-top:8px;">
-        Classes and timings are the same every weekday. Saturdays and Sundays are blocked.
-      </p>
-    </section>
-
-    <!-- Classes taught (shown as today's schedule for selected date) -->
-    <section class="glass">
-      <div class="class-row" style="margin-bottom:10px">
-        <h2 style="margin:0;color:#fff" id="classesHeading">Your classes for <span id="dateLabel">—</span></h2>
-      </div>
-      <div class="grid-classes" id="classesGrid"></div>
-    </section>
-
-    <!-- Actions for selected class -->
-    <section class="glass" id="selectedHeader" style="display:none">
-      <div class="class-row">
-        <div>
-          <h2 style="margin:0;color:#fff" id="selectedTitle">Class</h2>
-          <div class="muted" id="selectedMeta">Room • Population</div>
-        </div>
-        <div class="actions">
-          <a class="pill" href="#" id="btnStart">Start attendance</a>
-          <a class="pill" href="#" id="btnExport">Export CSV</a>
-          <a class="pill" href="#" id="btnHistory">View history</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Roster -->
-    <section class="glass" id="rosterSection" style="display:none">
-      <h3 style="margin:0 0 10px;color:#fff">Roster</h3>
-      <div class="card" style="padding:0">
-        <table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Student</th>
-              <th>Last status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody id="rosterTable"></tbody>
-        </table>
-      </div>
-    </section>
-
-    <!-- Attendance history -->
-    <section class="glass">
-      <h3 style="margin:0 0 10px;color:#fff">Attendance history</h3>
-      <div class="card" style="padding:0">
-        <table>
-          <thead>
-            <tr>
-              <th>Date</th>
-              <th>Section</th>
-              <th>Present</th>
-              <th>Late</th>
-              <th>Absent</th>
-            </tr>
-          </thead>
-          <tbody id="historyTable"></tbody>
-        </table>
-      </div>
-    </section>
-
-  </div>
-</main>
-
-<script>
-  /* ---------- Demo data seeding ---------- */
-  function ensureTeacher() {
-    let t = localStorage.getItem("ru_teacher");
-    if (t) return JSON.parse(t);
-    const fallback = {
-      email: "smith@rutgers.edu",
-      name: "Dr. Smith",
-      classes: [
-        { sectionId: "CS101-01", course: "CS101", title: "Intro to CS", room: "HLL 201", population: 42, start:"09:00", end:"10:20" },
-        { sectionId: "CS101-02", course: "CS101", title: "Intro to CS", room: "ARC 103", population: 38, start:"11:00", end:"12:20" },
-        { sectionId: "MATH201-01", course: "MATH201", title: "Discrete Math", room: "BE 112", population: 50, start:"14:00", end:"15:20" }
-      ],
-      roster: [
-        { id:"S001", name:"Ava Patel", status:"Present" },
-        { id:"S002", name:"Liam Chen", status:"Late" },
-        { id:"S003", name:"Noah Kim", status:"Absent" },
-        { id:"S004", name:"Sophia Garcia", status:"Present" }
-      ],
-      attendanceHistory: [
-        { date:"2025-09-28", sectionId:"CS101-01", present:38, late:2, absent:2 },
-        { date:"2025-09-30", sectionId:"CS101-01", present:37, late:3, absent:2 },
-        { date:"2025-10-02", sectionId:"CS101-02", present:35, late:1, absent:2 }
-      ]
-    };
-    localStorage.setItem("ru_teacher", JSON.stringify(fallback));
-    return fallback;
-  }
-  const teacher = ensureTeacher();
-
-  /* ---------- Utilities ---------- */
-  function formatDateLabel(date){
-    return date.toLocaleDateString(undefined, { weekday:'long', year:'numeric', month:'short', day:'numeric' });
-  }
-  function toISODate(date){
-    const tz = new Date(date.getTime() - date.getTimezoneOffset()*60000);
-    return tz.toISOString().slice(0,10);
-  }
-  function isWeekend(date){
-    const d = date.getDay(); // 0 Sun, 6 Sat
-    return d === 0 || d === 6;
-  }
-  function nextWeekday(date){
-    const d = new Date(date);
-    while (isWeekend(d)) d.setDate(d.getDate()+1); // push to Monday
-    return d;
-  }
-
-  /* ---------- State ---------- */
-  let selectedDate = nextWeekday(new Date()); // default to today (or next Monday if weekend)
-  let selected = null;
-
-  /* ---------- Init header ---------- */
-  document.getElementById('welcome').textContent = `Welcome, ${teacher.name}`;
-  document.getElementById('subcopy').textContent = `${teacher.email} • ${teacher.classes.length} classes this term`;
-  const totalStudents = teacher.classes.reduce((a,c)=>a + (c.population||0), 0);
-  const kpis = document.getElementById('kpis');
-  kpis.innerHTML = `
-    <div class="bubble"><div class="label muted">Classes</div><div class="value">${teacher.classes.length}</div></div>
-    <div class="bubble"><div class="label muted">Total students</div><div class="value">${totalStudents}</div></div>
-    <div class="bubble"><div class="label muted">Last session</div><div class="value">${teacher.attendanceHistory?.[0]?.date || '—'}</div></div>
-  `;
-
-  /* ---------- Date picker setup ---------- */
-  const picker = document.getElementById('datePicker');
-  const weekdayBadge = document.getElementById('weekdayBadge');
-  const dateLabel = document.getElementById('dateLabel');
-
-  // Initialize picker (min today-90, max today+90 for demo)
-  const today = new Date();
-  const min = new Date(); min.setDate(today.getDate() - 90);
-  const max = new Date(); max.setDate(today.getDate() + 90);
-  picker.min = toISODate(min);
-  picker.max = toISODate(max);
-  picker.value = toISODate(selectedDate);
-  dateLabel.textContent = formatDateLabel(selectedDate);
-  weekdayBadge.textContent = selectedDate.toLocaleDateString(undefined, { weekday:'long' });
-
-  picker.addEventListener('change', () => {
-    let d = new Date(picker.value + 'T00:00:00');
-    if (isNaN(d)) return;
-    if (isWeekend(d)) {
-      d = nextWeekday(d);
-      alert('Weekends are holidays. Snapping to next weekday: ' + formatDateLabel(d));
-      picker.value = toISODate(d);
+  <style>
+    :root {
+      --ru-red: #cc0033;
+      --ru-red-dark: #a60029;
+      --status-present: #28a745;
+      --status-absent: #dc3545;
     }
-    selectedDate = d;
-    dateLabel.textContent = formatDateLabel(selectedDate);
-    weekdayBadge.textContent = selectedDate.toLocaleDateString(undefined, { weekday:'long' });
-    renderClasses(); // same classes each weekday, but keeps UI in sync with chosen date
-  });
 
-  /* ---------- Classes grid ---------- */
-  const grid = document.getElementById('classesGrid');
-  function renderClasses(){
-    grid.innerHTML = teacher.classes.map(cls => `
-      <article class="card class-card" onclick="selectClass('${cls.sectionId}')">
-        <div class="class-row">
-          <div>
-            <div style="font-size:18px; font-weight:800">${cls.title}</div>
-            <div class="muted">${cls.course} • ${cls.sectionId}</div>
-          </div>
-          <span class="code">${cls.room}</span>
-        </div>
-        <div class="muted">Time</div>
-        <div style="display:flex; align-items:center; justify-content:space-between">
-          <div class="muted">${cls.start} – ${cls.end}</div>
-          <strong>${cls.population || 0}</strong>
-        </div>
-        <div class="actions" style="margin-top:10px">
-          <a class="pill" href="#" onclick="event.stopPropagation(); startAttendance('${cls.sectionId}')">Take attendance</a>
-          <a class="pill" href="#" onclick="event.stopPropagation(); openRoster('${cls.sectionId}')">Open roster</a>
-        </div>
-      </article>
-    `).join('');
-  }
-  renderClasses();
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background: url('https://images.unsplash.com/photo-1581091870627-dbc6d7f0e213?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat fixed;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      color: #343a40;
+    }
 
-  /* ---------- History table ---------- */
-  const histBody = document.getElementById('historyTable');
-  histBody.innerHTML = (teacher.attendanceHistory || []).map(h => `
-    <tr>
-      <td>${h.date}</td>
-      <td>${h.sectionId}</td>
-      <td>${h.present}</td>
-      <td>${h.late}</td>
-      <td>${h.absent}</td>
-    </tr>
-  `).join('');
+    body::before {
+      content:"";
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: -1;
+    }
 
-  /* ---------- Selected class & roster ---------- */
-  function selectClass(sectionId){
-    selected = teacher.classes.find(c=>c.sectionId===sectionId) || null;
-    renderSelected();
-  }
-  function openRoster(sectionId){
-    selectClass(sectionId);
-    document.getElementById('rosterSection').scrollIntoView({behavior:'smooth', block:'start'});
-  }
-  function startAttendance(sectionId){
-    selectClass(sectionId);
-    alert(`Starting live attendance for ${sectionId} on ${formatDateLabel(selectedDate)} (stub).`);
-    // Later: location.href = `take_attendance.html?section=${encodeURIComponent(sectionId)}&date=${toISODate(selectedDate)}`
-  }
+    .banner {
+      background-color: var(--ru-red-dark);
+      text-align: center;
+      padding: 0.8rem 0;
+      color: #fff;
+      font-weight: 700;
+      letter-spacing: 1px;
+      font-size: 1.2rem;
+      text-transform: uppercase;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+    }
 
-  function renderSelected(){
-    const head = document.getElementById('selectedHeader');
-    const rosterSec = document.getElementById('rosterSection');
-    if (!selected){ head.style.display='none'; rosterSec.style.display='none'; return; }
+    .navbar {
+      background-color: var(--ru-red);
+      box-shadow: 0 2px 10px rgba(0,0,0,0.3);
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
 
-    head.style.display='block';
-    rosterSec.style.display='block';
-    document.getElementById('selectedTitle').textContent = `${selected.title} • ${selected.sectionId}`;
-    document.getElementById('selectedMeta').textContent =
-      `${selected.room} • ${selected.population} students • ${selected.start}–${selected.end} • ${formatDateLabel(selectedDate)}`;
+    .navbar-brand {
+      font-weight: 700;
+      color: #fff !important;
+      font-family: 'Roboto Slab', serif;
+      letter-spacing: 0.7px;
+    }
 
-    // actions
-    document.getElementById('btnStart').onclick = (e)=>{ e.preventDefault(); startAttendance(selected.sectionId); };
-    document.getElementById('btnExport').onclick = (e)=>{ e.preventDefault(); exportCSV(); };
-    document.getElementById('btnHistory').onclick = (e)=>{ e.preventDefault(); alert('History view coming soon.'); };
+    .btn-logout {
+      background: #fff;
+      color: var(--ru-red);
+      font-weight: 600;
+      transition: 0.3s;
+      border-radius: 8px;
+    }
 
-    // Demo roster (shared)
-    const tbody = document.getElementById('rosterTable');
-    const roster = teacher.roster || [];
-    tbody.innerHTML = roster.map(r => `
-      <tr>
-        <td>${r.id}</td>
-        <td>${r.name}</td>
-        <td><span class="status ${r.status.toLowerCase()}">${r.status}</span></td>
-        <td>
-          <a class="pill" href="#" onclick="mark('${r.id}','Present');return false;">Present</a>
-          <a class="pill" href="#" onclick="mark('${r.id}','Late');return false;">Late</a>
-          <a class="pill" href="#" onclick="mark('${r.id}','Absent');return false;">Absent</a>
-        </td>
-      </tr>
-    `).join('');
-  }
+    .btn-logout:hover {
+      background: #f8f9fa;
+      transform: translateY(-2px);
+    }
 
-  function mark(id, status){
-    const idx = (teacher.roster||[]).findIndex(r=>r.id===id);
-    if (idx>=0){ teacher.roster[idx].status = status; saveTeacher(); renderSelected(); }
-  }
+    .dashboard {
+      max-width: 1200px;
+      margin: 3rem auto;
+      background: rgba(255,255,255,0.95);
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      backdrop-filter: blur(5px);
+      animation: fadeIn 1s ease-in-out;
+    }
 
-  function exportCSV(){
-    const rows = [['Date','Section','Present','Late','Absent']]
-      .concat((teacher.attendanceHistory||[]).map(h=>[h.date,h.sectionId,h.present,h.late,h.absent]));
-    const csv = rows.map(r=>r.join(',')).join('\n');
-    const blob = new Blob([csv], {type:'text/csv'});
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a'); a.href=url; a.download='attendance_history.csv'; a.click();
-    URL.revokeObjectURL(url);
-  }
+    h2 {
+      font-weight: 700;
+      font-family: 'Roboto Slab', serif;
+      color: var(--ru-red);
+      margin-bottom: 1.5rem;
+      font-size: 2rem;
+      letter-spacing: 1px;
+      text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+    }
 
-  function saveTeacher(){
-    localStorage.setItem('ru_teacher', JSON.stringify(teacher));
-  }
+    h4 {
+      font-weight: 600;
+      color: var(--ru-red-dark);
+      margin-bottom: 1rem;
+      font-size: 1.25rem;
+    }
 
-  // Auto-select first class on load
-  if (teacher.classes?.length) selectClass(teacher.classes[0].sectionId);
+    .table {
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+      transition: transform 0.3s, box-shadow 0.3s;
+      background: #fff;
+    }
 
-  // Logout
-  document.getElementById('logoutBtn').addEventListener('click', (e)=>{
-    e.preventDefault();
-    location.href = 'login.html';
-  });
-</script>
+    .table:hover {
+      transform: scale(1.01);
+      box-shadow: 0 12px 30px rgba(0,0,0,0.2);
+    }
+
+    thead {
+      background-color: var(--ru-red);
+      color: #fff;
+    }
+
+    tbody tr:hover {
+      background-color: #fbe8eb;
+      transition: 0.2s;
+    }
+
+    th, td {
+      vertical-align: middle !important;
+      text-align: center;
+      font-size: 0.95rem;
+    }
+
+    .badge-status {
+      padding: 0.45em 0.8em;
+      border-radius: 12px;
+      font-weight: 600;
+      font-size: 0.9em;
+      color: #fff;
+      transition: all 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    .badge-present {
+      background-color: var(--status-present);
+      animation: pulse 2s infinite;
+    }
+    .badge-absent {
+      background-color: var(--status-absent);
+      animation: shake 0.8s infinite;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(15px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.05); }
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      75% { transform: translateX(3px); }
+    }
+
+    footer {
+      background-color: var(--ru-red-dark);
+      color: #fff;
+      text-align: center;
+      padding: 1rem 0;
+      margin-top: auto;
+      font-size: 0.95rem;
+      box-shadow: 0 -4px 10px rgba(0,0,0,0.3);
+    }
+
+    footer a { color: #fff; text-decoration: underline; }
+
+    #courseFilter {
+      transition: all 0.3s ease;
+    }
+
+    #courseFilter:hover {
+      transform: scale(1.02);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="banner">Rutgers University | Attendance Management Portal</div>
+
+  <nav class="navbar navbar-expand-lg">
+    <div class="container">
+      <span class="navbar-brand">Teacher Dashboard</span>
+      <div class="ms-auto">
+        <a href="/logout" class="btn btn-logout">Logout</a>
+      </div>
+    </div>
+  </nav>
+
+  <div class="dashboard container">
+    <h2>Welcome back, {{ username }}</h2>
+
+    {% if summary %}
+    <h4>Student Attendance Summary</h4>
+    <div class="table-responsive summary-table">
+      <table class="table table-bordered">
+        <thead>
+          <tr>
+            <th>Course Code</th>
+            <th>Course Title</th>
+            <th>Student</th>
+            <th>Total Sessions</th>
+            <th>Absences</th>
+            <th>Attendance %</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in summary %}
+          <tr>
+            <td>{{ s.code }}</td>
+            <td>{{ s.title }}</td>
+            <td>{{ s.student_name }}</td>
+            <td>{{ s.total_sessions }}</td>
+            <td>{{ s.absences }}</td>
+            <td>{{ "%.2f"|format(s.attendance_percent) }}%</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+    {% endif %}
+
+    <div class="mb-3">
+      <label for="courseFilter" class="form-label"><strong>Filter by Course:</strong></label>
+      <select class="form-select" id="courseFilter" onchange="filterCourse()">
+        <option value="">All Courses</option>
+        {% for code, title in course_list %}
+          <option value="{{ code }}">{{ code }} - {{ title }}</option>
+        {% endfor %}
+      </select>
+    </div>
+
+    <div class="table-responsive">
+      <table id="attendanceTable" class="table table-bordered align-middle">
+        <thead>
+          <tr>
+            <th>Course</th>
+            <th>Term</th>
+            <th>Student</th>
+            <th>Session Date</th>
+            <th>Attendance</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s, c, t, e, u, sess, a in sections %}
+          <tr data-course="{{ c.code }}">
+            <td>{{ c.code }} - {{ c.title }}</td>
+            <td>{{ t.name }}</td>
+            <td>{{ u.name }}</td>
+            <td>{{ sess.session_date }}</td>
+            <td>
+              {% if a.status.lower() == 'present' %}
+                <span class="badge-status badge-present">Present</span>
+              {% else %}
+                <span class="badge-status badge-absent">Absent</span>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <footer>
+    © {{ year }} Rutgers Attendance Portal. All rights reserved. |
+    <a href="https://www.rutgers.edu" target="_blank">rutgers.edu</a>
+  </footer>
+
+  <script>
+    function filterCourse() {
+      const selected = document.getElementById('courseFilter').value;
+      const rows = document.querySelectorAll('#attendanceTable tbody tr');
+      rows.forEach(row => {
+        row.style.display = (selected === "" || row.dataset.course === selected) ? '' : 'none';
+      });
+    }
+  </script>
 </body>
 </html>
